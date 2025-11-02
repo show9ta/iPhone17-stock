@@ -31,18 +31,26 @@
     background-color: #f0f0f0;
   }
 
+  /* 在庫あり */
   .in-stock {
     background-color: orangered;
     color: white;
     font-weight: bold;
   }
+  .in-stock-row td:not(:last-child) {
+    background-color: #FFE5D0; /* 薄い赤みオレンジ系 */
+  }
 
+  /* 在庫なし */
   .out-stock {
     background-color: lightgrey;
     color: black;
   }
+  .out-stock-row td:not(:last-child) {
+    background-color: #F5F5F5; /* 薄いグレー */
+  }
 
-  /* 列幅比率：店舗2、商品3、在庫1 */
+  /* 列幅比率 */
   #stock-table th:nth-child(1),
   #stock-table td:nth-child(1) { width: 25%; }
   #stock-table th:nth-child(2),
@@ -52,7 +60,7 @@
 
   @media (max-width: 600px) {
     body {
-      font-size: 18px; /* スマホ用に少し小さく */
+      font-size: 18px;
     }
   }
 </style>
@@ -84,20 +92,31 @@ async function loadStock() {
   const tbody = document.querySelector('#stock-table tbody');
   tbody.innerHTML = '';
 
-  for (const store of Object.keys(data.stores)) {
-    const products = data.stores[store];
-    for (const product of Object.keys(products)) {
-      const value = products[product];
-      const tr = document.createElement('tr');
+　for (const store of Object.keys(data.stores)) {
+  　const products = data.stores[store];
+  　for (const product of Object.keys(products)) {
+    　const value = products[product];
+    　const tr = document.createElement('tr');
 
-      const tdStore = document.createElement('td'); tdStore.textContent = store; tr.appendChild(tdStore);
-      const tdProduct = document.createElement('td'); tdProduct.textContent = product; tr.appendChild(tdProduct);
-      const tdStock = document.createElement('td'); tdStock.textContent = value ? 'あり' : 'なし';
-      tdStock.className = value ? 'in-stock' : 'out-stock'; tr.appendChild(tdStock);
+    　const tdStore = document.createElement('td');
+    　tdStore.textContent = store;
+    　tr.appendChild(tdStore);
 
-      tbody.appendChild(tr);
-    }
-  }
+    　const tdProduct = document.createElement('td');
+    　tdProduct.textContent = product;
+    　tr.appendChild(tdProduct);
+
+    　const tdStock = document.createElement('td');
+    　tdStock.textContent = value ? 'あり' : 'なし';
+    　tdStock.className = value ? 'in-stock' : 'out-stock';
+    　tr.appendChild(tdStock);
+
+    　// 行全体に状態クラスを追加
+    　tr.className = value ? 'in-stock-row' : 'out-stock-row';
+
+    　tbody.appendChild(tr);
+  　}
+　}
 }
 
 // 初回表示
@@ -108,6 +127,7 @@ setInterval(loadStock, 10000);
 
 </body>
 </html>
+
 
 
 
