@@ -75,7 +75,7 @@
 <script>
 async function loadStock() {
   const gistUrl = 'https://gist.githubusercontent.com/show9ta/9b9db94d322df4c8eebff23e8262e736/raw/stock.json?' + new Date().getTime();
-  const res = await fetch(gistUrl); // Gistのrawデータを取得
+  const res = await fetch(gistUrl, { cache: "no-store" }); // Gistのrawデータを取得
   const data = await res.json();
 
   // timestamp を表示
@@ -103,8 +103,9 @@ async function loadStock() {
 // 初回表示
 loadStock();
 // 5秒ごとに更新
-setInterval(loadStock, 5000);
+setInterval(loadStock, 10000);
 </script>
 
 </body>
 </html>
+
